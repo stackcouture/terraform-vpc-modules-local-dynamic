@@ -3,3 +3,4 @@
 dev-tfplan 
 prod-tfplan 
 stage-tfplan 
+terraform.*
