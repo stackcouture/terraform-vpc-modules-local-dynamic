@@ -1,19 +1,19 @@
 resource "aws_subnet" "public_subnets" {
-  count             = length(var.public_subnet_names)
   vpc_id            = var.vpc_id
-  cidr_block        = var.public_subnet_cidrs[count.index]
-  availability_zone = var.subnet_az_names[count.index]
+  for_each          = { for index, az_name in slice(data.aws_availability_zones.avail_zones.names, 0, 2) : index => az_name }
+  cidr_block        = cidrsubnet(var.cidr_for_vpc, length(data.aws_availability_zones.avail_zones.names) > 3 ? 4 : 3, each.key)
+  availability_zone = each.value
   tags = {
-    Name = var.public_subnet_names[count.index]
+    Name = "${local.public_subnet_name}-${each.key + 1}" # Sequential names (public-subnet-1, public-subnet-2)
   }
 }
 
 resource "aws_subnet" "private_subnets" {
-  count             = length(var.private_subnet_names)
   vpc_id            = var.vpc_id
-  cidr_block        = var.private_subnet_cidrs[count.index]
-  availability_zone = var.subnet_az_names[count.index]
+  for_each          = { for index, az_name in slice(data.aws_availability_zones.avail_zones.names, 0, 2) : index + length(data.aws_availability_zones.avail_zones.names) => az_name }
+  cidr_block        = cidrsubnet(var.cidr_for_vpc, length(data.aws_availability_zones.avail_zones.names) > 3 ? 4 : 3, each.key)
+  availability_zone = each.value
   tags = {
-    Name = var.private_subnet_names[count.index]
+    Name = "${local.private_subnet_name}-${each.key - 2}" # Sequential names (private-subnet-1, private-subnet-2)
   }
 }

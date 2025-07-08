@@ -1,7 +1,11 @@
-output "public_subnet_ids" {
-  value = { for idx, subnet in aws_subnet.public_subnets : "subnet_${idx}" => subnet.id }
+output "public_subnets" {
+  value = [for subnet in aws_subnet.public_subnets : subnet.id]
 }
 
-output "private_subnet_ids" {
-  value = { for idx, subnet in aws_subnet.private_subnets : "subnet_${idx}" => subnet.id }
+output "private_subnets" {
+  value = [for subnet in aws_subnet.private_subnets : subnet.id]
+}
+
+output "az_names" {
+  value = [for az in data.aws_availability_zones.avail_zones.names : az]
 }

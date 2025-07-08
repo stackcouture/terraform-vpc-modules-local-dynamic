@@ -1,8 +1,4 @@
-variable "repo_full_name" {
-  type        = string
-  description = "Repo Full name"
-}
-
+# VPC Variables
 variable "vpc_cidr" {
   type        = string
   description = "VPC CIDR Block"
@@ -28,39 +24,16 @@ variable "enable_dns_hostnames" {
   description = "Enable DNS Hostnam"
 }
 
-
-# Subnets Variables 
-
-variable "public_subnet_names" {
-  type        = list(string)
-  description = "Public Subnet Names"
-}
-
-variable "public_subnet_cidrs" {
-  type        = list(string)
-  description = "Public Subnet CIDR Blocks"
-}
-
-variable "private_subnet_names" {
-  type        = list(string)
-  description = "Private Subnet AZ Names"
-}
-
-variable "private_subnet_cidrs" {
-  type        = list(string)
-  description = "Private Subnet CIDR Blocks"
-}
-
-variable "subnet_az_names" {
-  type        = list(string)
-  description = "Subnet AZ Names"
-}
-
-#Internet Gateway 
+# IGG 
 
 variable "igw_name" {
   type        = string
   description = "Internet Gateway Name"
+}
+
+variable "sg_name" {
+  type        = string
+  description = "Security group name"
 }
 
 # NAT Gateway 
@@ -71,27 +44,8 @@ variable "nat_gw_name" {
 }
 
 
-# Route Table
+# EC2 Instance 
 
-variable "public_rt_name" {
-  type        = string
-  description = "Route Table Name"
-}
-
-variable "private_rt_name" {
-  type        = string
-  description = "Private Route Table Name"
-}
-
-# Security Group 
-
-variable "sg_name" {
-  type        = string
-  description = "Security group name"
-}
-
-
-#EC2 Instance 
 variable "instance_type" {
   type        = string
   description = "Instance Type"

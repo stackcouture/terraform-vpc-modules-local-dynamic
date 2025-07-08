@@ -7,15 +7,10 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = var.public_rt_name
+    Name = local.public_rt_name
   }
 }
 
-resource "aws_route_table_association" "public-rt-association" {
-  for_each       = var.public_subnet_ids
-  subnet_id      = each.value
-  route_table_id = aws_route_table.public_rt.id
-}
 
 resource "aws_route_table" "private_rt" {
   vpc_id = var.vpc_id
@@ -24,13 +19,20 @@ resource "aws_route_table" "private_rt" {
     cidr_block = "0.0.0.0/0"
     gateway_id = var.nat_gateway_id
   }
+
   tags = {
-    Name = var.private_rt_name
+    Name = local.private_rt_name
   }
 }
 
-resource "aws_route_table_association" "private-rt-association" {
-  for_each       = var.private_subnet_ids
+resource "aws_route_table_association" "public_rt_association" {
+  for_each       = { for idx, subnet_id in var.public_subnet_ids : idx => subnet_id } # Convert list to map
+  subnet_id      = each.value
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "private_rt_association" {
+  for_each       = { for idx, subnet_id in var.private_subnet_ids : idx => subnet_id } # Convert list to map
   subnet_id      = each.value
   route_table_id = aws_route_table.private_rt.id
 }

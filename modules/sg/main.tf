@@ -4,7 +4,7 @@ resource "aws_security_group" "web_sg" {
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = var.sg_name
+    Name = "${local.sg_name}-${var.sg_name}"
   }
 }
 

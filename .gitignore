@@ -1,2 +1,5 @@
 .terraform
 .terraform.lock.hcl
+dev-tfplan 
+prod-tfplan 
+stage-tfplan 

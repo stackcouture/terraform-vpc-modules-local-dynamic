@@ -14,5 +14,6 @@ variable "iwg_id" {
 }
 
 variable "public_subnet_ids" {
-  type = map(string)
+  description = "List of public subnet IDs"
+  type        = list(string)
 }
