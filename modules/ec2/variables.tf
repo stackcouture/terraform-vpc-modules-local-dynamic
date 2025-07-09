@@ -18,7 +18,7 @@ variable "az_ids" {
 }
 
 variable "private_instance_tag" {
-  type = string 
+  type        = string
   description = "Private Instance Tag"
 }
 

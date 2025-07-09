@@ -6,14 +6,14 @@ enable_dns_support   = true
 enable_dns_hostnames = true
 
 #IGW 
-igw_name = "VPC-IGW"
-sg_name = "Web-SG" 
+igw_name    = "VPC-IGW"
+sg_name     = "Web-SG"
 nat_gw_name = "NAT-GW"
 
 
 # EC2 Instance 
 
-instance_type = "t2.micro"
-instance_tag  = "public-server"
-private_instance_tag = "rrivate-server"
+instance_type        = "t2.micro"
+instance_tag         = "public-server"
+private_instance_tag = "private-server"
 

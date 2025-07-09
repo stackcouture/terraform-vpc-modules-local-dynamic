@@ -44,12 +44,12 @@ module "nat" {
 }
 
 module "ec2" {
-  source            = "./modules/ec2"
-  instance_type     = var.instance_type
-  instance_tag      = var.instance_tag
-  public_subnet_ids = module.subnet.public_subnets
-  private_subnet_ids  = module.subnet.private_subnets
-  sg_id             = module.sg.sg_id
-  az_ids           = module.subnet.az_names
+  source               = "./modules/ec2"
+  instance_type        = var.instance_type
+  instance_tag         = var.instance_tag
+  public_subnet_ids    = module.subnet.public_subnets
+  private_subnet_ids   = module.subnet.private_subnets
+  sg_id                = module.sg.sg_id
+  az_ids               = module.subnet.az_names
   private_instance_tag = var.private_instance_tag
 }

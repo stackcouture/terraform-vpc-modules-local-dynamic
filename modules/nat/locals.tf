@@ -1,3 +1,3 @@
 locals {
-  nat_gw_name = "${terraform.workspace}" # Automatically uses the current workspace
+  nat_gw_name = "${terraform.workspace}-NAT-GW" # Automatically uses the current workspace
 }

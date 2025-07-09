@@ -4,14 +4,14 @@ resource "tls_private_key" "my_ec2key" {
 }
 
 resource "aws_key_pair" "my_ec2key" {
-  key_name   = "my-ec2key"
+  key_name   = "my-ec2key-${local.instance_name}"
   public_key = tls_private_key.my_ec2key.public_key_openssh
   depends_on = [tls_private_key.my_ec2key]
 }
 
 # Save the private key to a local file in .pem format
 resource "local_file" "private_key" {
-  filename        = "${path.root}/my-ec2key.pem"
+  filename        = "${path.root}/my-ec2key.pem-${local.instance_name}"
   content         = tls_private_key.my_ec2key.private_key_pem
   file_permission = "0400" # Read-only by the owner
 }
@@ -32,10 +32,10 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "public_instance" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
-  subnet_id = element(var.public_subnet_ids, 0)
-  key_name = aws_key_pair.my_ec2key.key_name
+  subnet_id                   = element(var.public_subnet_ids, 0)
+  key_name                    = aws_key_pair.my_ec2key.key_name
   vpc_security_group_ids      = [var.sg_id]
-  availability_zone = element(var.az_ids, 0)
+  availability_zone           = element(var.az_ids, 0)
   associate_public_ip_address = true
   root_block_device {
     volume_size = 8     # in GiB
@@ -48,16 +48,16 @@ resource "aws_instance" "public_instance" {
     delete_on_termination = true
   }
   tags = {
-    Name = "${local.instance_name}${var.instance_tag}"
+    Name = "${local.instance_name} - ${var.instance_tag}"
   }
 }
 
 resource "aws_instance" "private_instance" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
-  subnet_id = element(var.private_subnet_ids, 1)
-  vpc_security_group_ids      = [var.sg_id]
-  availability_zone = element(var.az_ids, 1)
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = element(var.private_subnet_ids, 1)
+  vpc_security_group_ids = [var.sg_id]
+  availability_zone      = element(var.az_ids, 1)
   root_block_device {
     volume_size = 8     # in GiB
     volume_type = "gp3" # General Purpose SSD
@@ -69,6 +69,6 @@ resource "aws_instance" "private_instance" {
     delete_on_termination = true
   }
   tags = {
-    Name = "${local.instance_name}${var.private_instance_tag}" 
+    Name = "${local.instance_name} - ${var.private_instance_tag}"
   }
 }
